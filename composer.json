@@ -1,0 +1,19 @@
+{
+  "name": "springbot/magento2-queue",
+  "description": "A generic job queuing package for Magento 2",
+  "type": "magento2-module",
+  "version": "dev-master",
+  "license": [
+    "OSL-3.0"
+  ],
+  "require": {
+    "stripe/stripe-php": "2.*"
+  },
+  "extra": {
+    "map": [
+      [
+        "*"
+      ]
+    ]
+  }
+}
