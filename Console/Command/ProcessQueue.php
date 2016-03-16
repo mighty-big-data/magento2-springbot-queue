@@ -6,6 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Springbot\Main\Helper\QueueProductChanges;
+use Magento\Framework\App\State;
 
 /**
  * Class ProcessQueue
@@ -22,10 +23,12 @@ class ProcessQueue extends Command
     private $springbotHelper;
 
     /**
+     * ProcessQueue constructor.
+     * @param State $state
      * @param QueueProductChanges $data
      */
     public function __construct(
-        \Magento\Framework\App\State $state,
+        State $state,
         QueueProductChanges $data)
     {
         $state->setAreaCode('frontend');
