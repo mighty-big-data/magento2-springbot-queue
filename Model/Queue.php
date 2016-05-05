@@ -25,16 +25,17 @@ class Queue extends AbstractModel
     }
 
     /**
+     * @param $class
      * @param $method
      * @param array $args
-     * @param $priority
      * @param string $queue
+     * @param $priority
      * @param int $minutesInFuture
      */
     public function scheduleJob(
+        $class,
         $method,
         array $args,
-        $class,
         $queue = 'default',
         $priority,
         $minutesInFuture = 0
