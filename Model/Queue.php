@@ -3,8 +3,8 @@
 namespace Springbot\Queue\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\ObjectManagerInterface as ObjectManager;
-
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
 
 class Queue extends AbstractModel
 {
@@ -12,12 +12,10 @@ class Queue extends AbstractModel
 
     /**
      * @param queueFactory $queueFactory
+     * @param Context $context
+     * @param Registry $registry
      */
-    public function __construct(
-        queueFactory $queueFactory,
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry
-    )
+    public function __construct(queueFactory $queueFactory, Context $context, Registry $registry)
     {
         $this->_init('Springbot\Queue\Model\ResourceModel\Queue');
         $this->queueFactory = $queueFactory;
@@ -36,11 +34,11 @@ class Queue extends AbstractModel
         $class,
         $method,
         array $args,
-        $queue = 'default',
         $priority,
+        $queue = 'default',
         $minutesInFuture = 0
     ) {
-        $queueModel = $this->queueFactory->create('Springbot\Queue\Model\Queue');
+        $queueModel = $this->queueFactory->create();
         $queueModel->addData([
             'method' => $method,
             'args' => json_encode($args),
