@@ -5,6 +5,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="queue_process" xsi:type="object">Springbot\Queue\Console\Command\ProcessQueue</item>
+                <item name="queue_enqueue" xsi:type="object">Springbot\Queue\Console\Command\Enqueue</item>
             </argument>
         </arguments>
     </type>

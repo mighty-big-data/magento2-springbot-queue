@@ -5,7 +5,6 @@ namespace Springbot\Queue\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Springbot\Main\Helper\QueueProductChanges;
 use Magento\Framework\App\State;
 
 /**
@@ -15,24 +14,13 @@ use Magento\Framework\App\State;
  */
 class ProcessQueue extends Command
 {
-    /**
-     * Springbot Helper
-     *
-     * @var QueueProductChanges
-     */
-    private $springbotHelper;
 
     /**
      * ProcessQueue constructor.
      * @param State $state
-     * @param QueueProductChanges $data
      */
-    public function __construct(
-        State $state,
-        QueueProductChanges $data)
+    public function __construct(State $state)
     {
-        $state->setAreaCode('frontend');
-        $this->springbotHelper = $data;
         parent::__construct();
     }
 
@@ -41,7 +29,7 @@ class ProcessQueue extends Command
      */
     protected function configure()
     {
-        $this->setName('springbot:process:queue')
+        $this->setName('springbot:queue:process')
             ->setDescription('Process Queue');
     }
 
@@ -54,7 +42,7 @@ class ProcessQueue extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->springbotHelper->deleteProduct(1, 1);
+
             $output->writeln("Queue Processed.");
         } catch (\Exception $e) {
             $output->writeln("Could not do the thing: " . $e->getMessage());

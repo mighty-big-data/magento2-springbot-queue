@@ -28,7 +28,7 @@ class Queue extends AbstractModel
      * @param array $args
      * @param string $queue
      * @param $priority
-     * @param int $minutesInFuture
+     * @param $time
      */
     public function scheduleJob(
         $class,
@@ -36,8 +36,14 @@ class Queue extends AbstractModel
         array $args,
         $priority,
         $queue = 'default',
-        $minutesInFuture = 0
+        $time = null
     ) {
+        if ($time) {
+            $nextRunAt = date("Y-m-d H:i:s", strtotime($time));
+        }
+        else {
+            $nextRunAt = date("Y-m-d H:i:s");
+        }
         $queueModel = $this->queueFactory->create();
         $queueModel->addData([
             'method' => $method,
@@ -46,7 +52,7 @@ class Queue extends AbstractModel
             'command_hash' => sha1($method . json_encode($args)),
             'queue' => $queue,
             'priority' => $priority,
-            'next_run_at' => date("Y-m-d H:i:s")
+            'next_run_at' => $nextRunAt
         ]);
         $queueModel->save();
     }
