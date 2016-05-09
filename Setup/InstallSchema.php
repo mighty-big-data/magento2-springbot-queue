@@ -62,11 +62,11 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Queue priority')
             ->addColumn(
-                'attemps',
+                'attempts',
                 Table::TYPE_INTEGER,
                 10,
                 [],
-                'Attemps to run queue')
+                'Attempts to run queue')
             ->addColumn(
                 'run_at',
                 Table::TYPE_DATETIME,

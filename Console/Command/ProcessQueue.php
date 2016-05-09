@@ -44,15 +44,13 @@ class ProcessQueue extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            if ($job = $this->_queue->getNextJob()) {
-                $job->run();
-                $output->writeln("Queue Processed.");
-            } else {
-                $output->writeln("No new jobs.");
-            }
-        } catch (\Exception $e) {
-            $output->writeln("Could not do the thing: " . $e->getMessage());
+        $success = $this->_queue->runNextJob();
+        if ($success === true) {
+            $output->writeln("Queue Processed.");
+        } else if ($success === false) {
+            $output->writeln("Job failed.");
+        } else {
+            $output->writeln("No jobs in queue.");
         }
     }
 }

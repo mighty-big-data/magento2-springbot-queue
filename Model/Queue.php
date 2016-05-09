@@ -6,6 +6,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Springbot\Queue\Model\ResourceModel\Job\Collection as JobCollection;
+use Exception;
 
 class Queue extends AbstractModel
 {
@@ -42,7 +43,7 @@ class Queue extends AbstractModel
         $class,
         $method,
         array $args,
-        $priority,
+        $priority = 1,
         $queue = 'default',
         $time = null
     ) {
@@ -71,10 +72,36 @@ class Queue extends AbstractModel
             ->setCurPage(1)
             ->getFirstItem();
         if ($nextJob) {
-            $nextJob->delete();
             return $nextJob;
         } else {
             return null;
         }
     }
+
+    /**
+     * @return bool|null
+     */
+    public function runNextJob()
+    {
+        if ($nextJob = $this->getNextJob()) {
+            try {
+                $nextJob->run();
+                $nextJob->delete();
+                return true;
+            }
+            catch (Exception $e) {
+                $attempts = $nextJob->getData('attempts');
+                $attempts = (!$attempts) ? 0 : $attempts;
+                $attempts++;
+                $nextJob->setData('error', $e->getMessage());
+                $nextJob->setData('attempts', $attempts);
+                $nextJob->save();
+                return false;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
 }
