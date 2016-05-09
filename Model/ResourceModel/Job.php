@@ -4,7 +4,7 @@ namespace Springbot\Queue\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class Queue extends AbstractDb
+class Job extends AbstractDb
 {
     /**
      * Define main table

@@ -5,20 +5,28 @@ namespace Springbot\Queue\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Springbot\Queue\Model\ResourceModel\Job\Collection as JobCollection;
 
 class Queue extends AbstractModel
 {
-    protected $queueFactory;
+    protected $jobFactory;
+    protected $jobCollection;
 
     /**
-     * @param queueFactory $queueFactory
+     * @param JobFactory $jobFactory
+     * @param JobCollection $jobCollection
      * @param Context $context
      * @param Registry $registry
      */
-    public function __construct(queueFactory $queueFactory, Context $context, Registry $registry)
-    {
-        $this->_init('Springbot\Queue\Model\ResourceModel\Queue');
-        $this->queueFactory = $queueFactory;
+    public function __construct(
+        JobFactory $jobFactory,
+        JobCollection $jobCollection,
+        Context $context,
+        Registry $registry
+    ) {
+        $this->_init('Springbot\Queue\Model\ResourceModel\Job');
+        $this->jobFactory = $jobFactory;
+        $this->jobCollection = $jobCollection;
         parent::__construct($context, $registry);
     }
 
@@ -40,11 +48,10 @@ class Queue extends AbstractModel
     ) {
         if ($time) {
             $nextRunAt = date("Y-m-d H:i:s", strtotime($time));
-        }
-        else {
+        } else {
             $nextRunAt = date("Y-m-d H:i:s");
         }
-        $queueModel = $this->queueFactory->create();
+        $queueModel = $this->jobFactory->create();
         $queueModel->addData([
             'method' => $method,
             'args' => json_encode($args),
@@ -57,4 +64,17 @@ class Queue extends AbstractModel
         $queueModel->save();
     }
 
+    public function getNextJob()
+    {
+        $nextJob = $this->jobCollection
+            ->setPageSize(2)
+            ->setCurPage(1)
+            ->getFirstItem();
+        if ($nextJob) {
+            $nextJob->delete();
+            return $nextJob;
+        } else {
+            return null;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Springbot\Queue\Model\ResourceModel\Queue;
+namespace Springbot\Queue\Model\ResourceModel\Job;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
@@ -12,8 +12,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            'Springbot\Queue\Model\Queue',
-            'Springbot\Queue\Model\ResourceModel\Queue'
+            'Springbot\Queue\Model\Job',
+            'Springbot\Queue\Model\ResourceModel\Job'
         );
     }
 }
