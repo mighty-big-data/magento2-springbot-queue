@@ -37,20 +37,14 @@ class Data extends AbstractHelper
         parent::__construct($context);
     }
 
+
     /**
-     * @param $token
+     * Get store config
+     * 
+     * @return array
      */
-    public function authenticate($token)
+    public function getConfig()
     {
-        // Grab the security token and convert it into a SHA-1 hash
-        $securityToken = $this->_scopeConfig->getValue('springbot/configuration/security_token');
-        $hash = sha1($securityToken);
-        
-        // Authenticate if the hash and token match
-        if ($token === $hash && $token !== self::BLANK_HASH) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->_scopeConfig->getValue('springbot');
     }
 }
