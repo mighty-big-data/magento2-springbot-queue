@@ -4,7 +4,7 @@
     <route url="/V1/springbot/queue/config" method="GET">
         <service class="Springbot\Queue\Api\ConfigInterface" method="getConfig"/>
         <resources>
-            <resource ref="Springbot_Queue::"/>
+            <resource ref="Springbot_Queue::queue"/>
         </resources>
     </route>
 </routes>
