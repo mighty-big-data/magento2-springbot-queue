@@ -9,15 +9,14 @@ use Magento\Framework\App\State;
 use Springbot\Queue\Model\Queue;
 
 /**
- * Class ProcessQueue
+ * Class ProcessQueueCommand
  *
  * @package Springbot\Queue\Console\Command
  */
-class ProcessQueue extends Command
+class ProcessQueueCommand extends Command
 {
 
     /**
-     * ProcessQueue constructor.
      * @param State $state
      * @param Queue $queue
      */

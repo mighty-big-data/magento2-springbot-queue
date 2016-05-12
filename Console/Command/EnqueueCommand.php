@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Springbot\Queue\Model\Queue;
 
 /**
- * Class Enqueue
+ * Class EnqueueCommand
  *
  * @package Springbot\Queue\Console\Command
  */
-class Enqueue extends Command
+class EnqueueCommand extends Command
 {
 
     const CLASS_ARGUMENT = '<class>';
@@ -27,7 +27,6 @@ class Enqueue extends Command
     private $_queue;
 
     /**
-     * ProcessQueue constructor.
      * @param State $state
      * @param Queue $queue
      */

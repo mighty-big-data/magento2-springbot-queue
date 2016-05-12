@@ -52,8 +52,8 @@ class Queue extends AbstractModel
         } else {
             $nextRunAt = date("Y-m-d H:i:s");
         }
-        $queueModel = $this->jobFactory->create();
-        $queueModel->addData([
+        $jobModel = $this->jobFactory->create();
+        $jobModel->addData([
             'method' => $method,
             'args' => json_encode($args),
             'class' => $class,
@@ -62,7 +62,7 @@ class Queue extends AbstractModel
             'priority' => $priority,
             'next_run_at' => $nextRunAt
         ]);
-        $queueModel->save();
+        $jobModel->save();
     }
 
     public function getNextJob()

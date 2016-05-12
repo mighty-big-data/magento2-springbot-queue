@@ -4,8 +4,9 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="queue_process" xsi:type="object">Springbot\Queue\Console\Command\ProcessQueue</item>
-                <item name="queue_enqueue" xsi:type="object">Springbot\Queue\Console\Command\Enqueue</item>
+                <item name="queue_process" xsi:type="object">Springbot\Queue\Console\Command\ProcessQueueCommand</item>
+                <item name="queue_enqueue" xsi:type="object">Springbot\Queue\Console\Command\EnqueueCommand</item>
+                <item name="queue_list" xsi:type="object">Springbot\Queue\Console\Command\ListCommand</item>
             </argument>
         </arguments>
     </type>
