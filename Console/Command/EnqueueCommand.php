@@ -22,7 +22,6 @@ class EnqueueCommand extends Command
     const PRIORITY_ARGUMENT = '<priority>';
     const QUEUE_ARGUMENT = '<queue>';
     const PARAMS_ARGUMENT = '<params>';
-    const MAX_ARGUMENTS = 10;
 
     private $_queue;
 
