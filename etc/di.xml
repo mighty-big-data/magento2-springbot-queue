@@ -10,6 +10,5 @@
             </argument>
         </arguments>
     </type>
-
-    <preference for="Springbot\Queue\Api\ConfigInterface" type="Springbot\Queue\Helper\Data"/>
+    <preference for="Springbot\Queue\Api\JobsInterface" type="Springbot\Queue\Api\Jobs"/>
 </config>

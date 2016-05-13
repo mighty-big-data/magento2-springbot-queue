@@ -104,4 +104,12 @@ class Queue extends AbstractModel
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->getCollection()->count();
+    }
+
 }

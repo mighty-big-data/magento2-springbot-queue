@@ -13,17 +13,8 @@ use Magento\Framework\App\Helper\Context;
  */
 class Data extends AbstractHelper
 {
-    const BLANK_HASH = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
-    
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $_scopeConfig;
 
-    /**
-     * @var array
-     */
-    protected $_attributes = [];
+    protected $_scopeConfig;
 
     /**
      * Data constructor.
@@ -38,13 +29,4 @@ class Data extends AbstractHelper
     }
 
 
-    /**
-     * Get store config
-     * 
-     * @return array
-     */
-    public function getConfig()
-    {
-        return $this->_scopeConfig->getValue('springbot');
-    }
 }
