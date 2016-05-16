@@ -2,6 +2,7 @@
 
 namespace Springbot\Queue\Model;
 
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
@@ -68,10 +69,12 @@ class Queue extends AbstractModel
     public function getNextJob()
     {
         $nextJob = $this->jobCollection
+            ->setOrder('priority', Collection::SORT_ORDER_ASC)
+            ->addOrder('id', Collection::SORT_ORDER_ASC)
             ->setPageSize(2)
             ->setCurPage(1)
             ->getFirstItem();
-        if ($nextJob) {
+        if (!$nextJob->isEmpty()) {
             return $nextJob;
         } else {
             return null;
