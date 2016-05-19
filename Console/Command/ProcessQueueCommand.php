@@ -48,7 +48,7 @@ class ProcessQueueCommand extends Command
         $success = $this->_queue->runNextJob();
         if ($success === true) {
             $output->writeln("Queue Processed.");
-        } else if ($success === false) {
+        } elseif ($success === false) {
             $output->writeln("Job failed.");
         } else {
             $output->writeln("No jobs in queue.");

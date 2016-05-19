@@ -45,11 +45,9 @@ class Jobs extends AbstractModel implements JobsInterface
         $result = $this->_queue->runNextJob();
         if ($result === true) {
             $message = "Job(s) run successfully";
-        }
-        else if ($result === false) {
+        } elseif ($result === false) {
             $message = "Job(s) failed";
-        }
-        else {
+        } else {
             $message = "No jobs left to run";
         }
         return [[
@@ -57,5 +55,4 @@ class Jobs extends AbstractModel implements JobsInterface
             'message' => $message
         ]];
     }
-
 }

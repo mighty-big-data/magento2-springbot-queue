@@ -37,12 +37,10 @@ class Job extends AbstractModel
             $object = $this->_objectManager->get($class);
             if (method_exists($object, $method)) {
                 return call_user_func_array([$object, $method], $args);
-            }
-            else {
+            } else {
                 throw new Exception("Method {$method} does not exist in class {$class}");
             }
-        }
-        else {
+        } else {
             throw new Exception("Class {$class} does not exist");
         }
     }
@@ -59,5 +57,4 @@ class Job extends AbstractModel
         $nextRun = date("Y-m-d H:i:s", strtotime("+$expMinutes minutes"));
         return $nextRun;
     }
-
 }

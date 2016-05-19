@@ -66,8 +66,7 @@ class Queue extends AbstractModel
                 'next_run_at' => $nextRunAt
             ]);
             $jobModel->save();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->debug("Failed to enqueue job: " . $e->getMessage());
         }
     }
@@ -101,8 +100,7 @@ class Queue extends AbstractModel
                 $nextJob->run();
                 $nextJob->delete();
                 return true;
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $attempts = $nextJob->getData('attempts');
                 $attempts = (!$attempts) ? 0 : $attempts;
                 $attempts++;
@@ -112,8 +110,7 @@ class Queue extends AbstractModel
                 $nextJob->save();
                 return false;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -125,5 +122,4 @@ class Queue extends AbstractModel
     {
         return $this->getCollection()->count();
     }
-
 }
