@@ -37,11 +37,27 @@ class Job extends AbstractModel
             $object = $this->_objectManager->get($class);
             if (method_exists($object, $method)) {
                 return call_user_func_array([$object, $method], $args);
-            } else {
+            }
+            else {
                 throw new Exception("Method {$method} does not exist in class {$class}");
             }
-        } else {
+        }
+        else {
             throw new Exception("Class {$class} does not exist");
         }
     }
+
+    public function setNextRunAt()
+    {
+        $this->setData('next_run_at', $this->_calculateNextRunAt());
+    }
+
+    protected function _calculateNextRunAt()
+    {
+        $attempts = $this->getAttempts();
+        $expMinutes = pow(2, $attempts);
+        $nextRun = date("Y-m-d H:i:s", strtotime("+$expMinutes minutes"));
+        return $nextRun;
+    }
+
 }

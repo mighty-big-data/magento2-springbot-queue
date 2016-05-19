@@ -39,6 +39,7 @@ class Queue extends AbstractModel
      * @param string $queue
      * @param $priority
      * @param $time
+     * @return boolean
      */
     public function scheduleJob(
         $class,
@@ -53,27 +54,36 @@ class Queue extends AbstractModel
         } else {
             $nextRunAt = date("Y-m-d H:i:s");
         }
-        $jobModel = $this->jobFactory->create();
-        $jobModel->addData([
-            'method' => $method,
-            'args' => json_encode($args),
-            'class' => $class,
-            'command_hash' => sha1($method . json_encode($args)),
-            'queue' => $queue,
-            'priority' => $priority,
-            'next_run_at' => $nextRunAt
-        ]);
-        $jobModel->save();
+        try {
+            $jobModel = $this->jobFactory->create();
+            $jobModel->addData([
+                'method' => $method,
+                'args' => json_encode($args),
+                'class' => $class,
+                'hash' => sha1($method . json_encode($args)),
+                'queue' => $queue,
+                'priority' => $priority,
+                'next_run_at' => $nextRunAt
+            ]);
+            $jobModel->save();
+        }
+        catch (\Exception $e) {
+            $this->_logger->debug("Failed to enqueue job: " . $e->getMessage());
+        }
     }
 
     public function getNextJob()
     {
-        $nextJob = $this->jobCollection
-            ->setOrder('priority', Collection::SORT_ORDER_ASC)
+        $collection = $this->jobCollection->addFieldToFilter(
+            ['next_run_at', 'next_run_at'],
+            [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
+        );
+        $nextJob = $collection->setOrder('priority', Collection::SORT_ORDER_ASC)
             ->addOrder('id', Collection::SORT_ORDER_ASC)
             ->setPageSize(2)
             ->setCurPage(1)
-            ->getFirstItem();
+            ->getFirstItem()
+        ;
         if (!$nextJob->isEmpty()) {
             return $nextJob;
         } else {
@@ -98,6 +108,7 @@ class Queue extends AbstractModel
                 $attempts++;
                 $nextJob->setData('error', $e->getMessage());
                 $nextJob->setData('attempts', $attempts);
+                $nextJob->setNextRunAt();
                 $nextJob->save();
                 return false;
             }

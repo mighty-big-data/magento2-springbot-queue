@@ -17,7 +17,8 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'springbot_queue'
          */
-        $table = $installer->getConnection()->newTable(
+        $connection = $installer->getConnection();
+        $table = $connection->newTable(
             $installer->getTable('springbot_queue'))
             ->addColumn(
                 'id',
@@ -44,7 +45,7 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Class To Instantiate')
             ->addColumn(
-                'command_hash',
+                'hash',
                 Table::TYPE_TEXT,
                 40,
                 ['nullable' => false],
@@ -103,6 +104,15 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 [],
                 'Next run time')
+            ->addIndex(
+                $connection->getIndexName(
+                    $installer->getTable('springbot_queue'),
+                    ['hash'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['hash'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+            )
             ->setComment('Springbot Queue Table');
 
         $installer->getConnection()->createTable($table);
