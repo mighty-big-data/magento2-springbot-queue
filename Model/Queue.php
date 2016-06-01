@@ -49,26 +49,41 @@ class Queue extends AbstractModel
         $queue = 'default',
         $time = null
     ) {
-        if ($time) {
-            $nextRunAt = date("Y-m-d H:i:s", strtotime($time));
-        } else {
-            $nextRunAt = date("Y-m-d H:i:s");
-        }
         try {
-            $jobModel = $this->jobFactory->create();
-            $jobModel->addData([
-                'method' => $method,
-                'args' => json_encode($args),
-                'class' => $class,
-                'hash' => sha1($method . json_encode($args)),
-                'queue' => $queue,
-                'priority' => $priority,
-                'next_run_at' => $nextRunAt
-            ]);
-            $jobModel->save();
+            $hash = sha1($method . json_encode($args));
+            if ($this->jobExists($hash)) {
+                return false;
+            }
+            else {
+                if ($time) {
+                    $nextRunAt = date("Y-m-d H:i:s", strtotime($time));
+                } else {
+                    $nextRunAt = date("Y-m-d H:i:s");
+                }
+                $jobModel = $this->jobFactory->create();
+                $jobModel->addData([
+                    'method' => $method,
+                    'args' => json_encode($args),
+                    'class' => $class,
+                    'hash' => $hash,
+                    'queue' => $queue,
+                    'priority' => $priority,
+                    'next_run_at' => $nextRunAt
+                ]);
+                $jobModel->save();
+                return true;
+            }
         } catch (\Exception $e) {
             $this->_logger->debug("Failed to enqueue job: " . $e->getMessage());
+            return false;
         }
+    }
+
+    public function jobExists($hash)
+    {
+        $collection = $this->jobCollection->addFieldToFilter('hash', $hash);
+        $item = $collection->getFirstItem();
+        return (!$item->isEmpty());
     }
 
     public function getNextJob()

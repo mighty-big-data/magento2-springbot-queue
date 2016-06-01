@@ -73,19 +73,19 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_DATETIME,
                 null,
                 [],
-                'Next run time')
+                'Initial run time')
             ->addColumn(
                 'locked_at',
                 Table::TYPE_DATETIME,
                 null,
                 [],
-                'Next run time')
+                'Locked at time')
             ->addColumn(
                 'locked_by',
                 Table::TYPE_TEXT,
                 255,
                 [],
-                'Next run time')
+                'Locked by pid')
             ->addColumn(
                 'error',
                 Table::TYPE_TEXT,
@@ -104,15 +104,6 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 [],
                 'Next run time')
-            ->addIndex(
-                $connection->getIndexName(
-                    $installer->getTable('springbot_queue'),
-                    ['hash'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                ),
-                ['hash'],
-                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
-            )
             ->setComment('Springbot Queue Table');
 
         $installer->getConnection()->createTable($table);

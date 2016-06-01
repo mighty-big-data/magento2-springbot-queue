@@ -58,14 +58,19 @@ class EnqueueCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->_queue->scheduleJob(
+            $successful = $this->_queue->scheduleJob(
                 $input->getArgument(self::CLASS_ARGUMENT),
                 $input->getArgument(self::METHOD_ARGUMENT),
                 $input->getArgument(self::PARAMS_ARGUMENT),
                 $input->getArgument(self::PRIORITY_ARGUMENT),
                 $input->getArgument(self::QUEUE_ARGUMENT)
             );
-            $output->writeln("Job enqueued. " . $input->getArgument(self::CLASS_ARGUMENT));
+            if ($successful) {
+                $output->writeln("Job enqueued. " . $input->getArgument(self::CLASS_ARGUMENT));
+            }
+            else {
+                $output->writeln("Job not enqueued.");
+            }
         } catch (\Exception $e) {
             $output->writeln("Failed to enqueue job: " . $e->getMessage());
         }
