@@ -21,7 +21,7 @@ interface JobsInterface
     /**
      * Process the next job(s) in the queue
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return \Springbot\Queue\Api\ProcessResponseInterface
      */
     public function process();
 }

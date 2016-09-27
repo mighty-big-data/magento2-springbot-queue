@@ -35,9 +35,9 @@ class Jobs extends AbstractModel implements JobsInterface
 
     public function viewJobs()
     {
-        return [[
+        return [
             'jobs' => $this->_queue->getCollection()->toArray()
-        ]];
+        ];
     }
 
     public function process()
@@ -50,11 +50,6 @@ class Jobs extends AbstractModel implements JobsInterface
         } else {
             $message = "No jobs left to run";
         }
-        return [[
-            'jobs' => [
-                'count' => $this->_queue->getCount(),
-                'message' => $message
-            ]
-        ]];
+        return new ProcessResponse($message, $this->_queue->getCount());
     }
 }
