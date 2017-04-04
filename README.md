@@ -2,21 +2,23 @@
 
 ## Magento2 Job Queue
 
-This module provides functionality to enqueue and run jobs in a queue. The idea is to be able to defer tasks that will
-take time to run so as not to cause long page load time for users. Example use cases may be sending an email,
-communicating with a remote API, or running cleanup tasks in the background.
+This module provides functionality to schedule and run jobs in a queue for Magento2. The basic idea is to allow 
+developers to defer tasks that would otherwise delay the page load time and cause site slowness. Example use cases may 
+be sending an email, communicating with a remote API, or running cleanup tasks in the background.
 
-While originally written for our Springbot Magento2 integration, this module can be used for many other cases.
+While originally written for our Springbot Magento2 integration, this module can be utilized for many other use cases.
 
 The module provides both programmatic and command line ways to enqueue, run, and view jobs. The key components of a job 
-are a fully qualified class name, a method name, and a list of arguments. The class must be autoloadable, the method 
-must be public, and the params must not contain objects. Additional options are priority, queue name, and "run at" time.
+are a fully qualified class name, a method name, and a list of arguments. There are a few requirements: the class must 
+be autoloadable, the method must be public, and the params must not contain objects. Additional options are priority, 
+queue name, and "run at" time.
 
 ### Installation
 
 Composer is the preferred method of installation:
 ```bash
 composer require springbot/magento2-queue
+php bin/magento module:enable Springbot_Queue
 ```
 
 ### Command line usage
@@ -61,10 +63,10 @@ class QueueExample
     /**
      * Queue examples
      */
-    public function myMethod()
+    public function runQueueExamples()
     {
         // Enqueue a job 
-        $this->queue->scheduleJob('\Fully\Qualified\ClassName', 'myMethod', ['arg1', 'arg2']);
+        $this->queue->scheduleJob('\Fully\Qualified\ClassName', 'methodToRun', ['arg1', 'arg2']);
         
         // Process the queue 
         $this->queue->runNextJob();
