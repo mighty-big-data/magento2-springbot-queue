@@ -135,6 +135,16 @@ class Queue extends AbstractModel
      */
     public function getCount()
     {
-        return $this->getCollection()->count();
+        return $this
+            ->getCollection()
+            ->addFieldToFilter(
+                ['next_run_at', 'next_run_at'],
+                [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
+            )
+            ->addFieldToFilter(
+                ['attempts', 'attempts'],
+                [['lt' => 10]]
+            )
+            ->count();
     }
 }
