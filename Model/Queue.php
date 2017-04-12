@@ -8,27 +8,32 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Springbot\Queue\Model\ResourceModel\Job\Collection as JobCollection;
 use Exception;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Queue extends AbstractModel
 {
     protected $jobFactory;
     protected $jobCollection;
+    protected $scopeConfig;
 
     /**
      * @param JobFactory $jobFactory
      * @param JobCollection $jobCollection
      * @param Context $context
      * @param Registry $registry
+     * @param ScopeConfigInterface $scopeConfigInterface
      */
     public function __construct(
         JobFactory $jobFactory,
         JobCollection $jobCollection,
         Context $context,
-        Registry $registry
+        Registry $registry,
+        ScopeConfigInterface $scopeConfigInterface
     ) {
         $this->_init('Springbot\Queue\Model\ResourceModel\Job');
         $this->jobFactory = $jobFactory;
         $this->jobCollection = $jobCollection;
+        $this->scopeConfig = $scopeConfigInterface;
         parent::__construct($context, $registry);
     }
 
@@ -128,6 +133,25 @@ class Queue extends AbstractModel
         } else {
             return null;
         }
+    }
+
+    /**
+     * Process the next N jobs in the queue where N is the max_jobs value
+     *
+     * @return bool|null
+     */
+    public function process()
+    {
+        $maxJobs = $this->scopeConfig->getValue('springbot/queue/max_jobs');
+        if (!is_numeric($maxJobs)) {
+            $maxJobs = 1;
+        }
+        for ($i = 1; $i <= $maxJobs; $i++) {
+            if ($this->runNextJob() === null) {
+                return null;
+            }
+        }
+        return true;
     }
 
     /**

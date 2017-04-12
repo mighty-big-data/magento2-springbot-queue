@@ -17,7 +17,7 @@ use Springbot\Queue\Model\Queue;
 class Jobs extends AbstractModel implements JobsInterface
 {
 
-    private $_queue;
+    private $queue;
 
     /**
      * @param Queue $queue
@@ -29,20 +29,20 @@ class Jobs extends AbstractModel implements JobsInterface
         Context $context,
         Registry $registry
     ) {
-        $this->_queue = $queue;
+        $this->queue = $queue;
         parent::__construct($context, $registry);
     }
 
     public function viewJobs()
     {
         return [
-            'jobs' => $this->_queue->getCollection()->toArray()
+            'jobs' => $this->queue->getCollection()->toArray()
         ];
     }
 
     public function process()
     {
-        $result = $this->_queue->runNextJob();
+        $result = $this->queue->process();
         if ($result === true) {
             $message = "Job(s) run successfully";
         } elseif ($result === false) {
@@ -50,6 +50,6 @@ class Jobs extends AbstractModel implements JobsInterface
         } else {
             $message = "No jobs left to run";
         }
-        return new ProcessResponse($message, $this->_queue->getCount());
+        return new ProcessResponse($message, $this->queue->getCount());
     }
 }
