@@ -47,7 +47,7 @@ class Job extends AbstractModel
 
     public function setNextRunAt()
     {
-        $this->setData('next_run_at', $this->_calculateNextRunAt());
+        $this->setData('run_at', $this->_calculateNextRunAt());
     }
 
     protected function _calculateNextRunAt()
