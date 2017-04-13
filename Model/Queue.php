@@ -144,6 +144,7 @@ class Queue extends AbstractModel
         if (!is_numeric($maxJobs)) {
             $maxJobs = 1;
         }
+
         for ($i = 1; $i <= $maxJobs; $i++) {
             if ($this->runNextJob() === null) {
                 return null;
@@ -166,9 +167,10 @@ class Queue extends AbstractModel
      */
     private function getRunnableJobs()
     {
+        $this->jobCollection->clear();
         return $this->jobCollection
             ->addFieldToFilter(
-                ['next_run_at', 'next_run_at'],
+                ['run_at', 'run_at'],
                 [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
             )
             ->addFieldToFilter(
