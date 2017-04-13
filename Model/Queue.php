@@ -2,13 +2,13 @@
 
 namespace Springbot\Queue\Model;
 
+use Exception;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Springbot\Queue\Model\ResourceModel\Job\Collection as JobCollection;
-use Exception;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Queue extends AbstractModel
 {
@@ -62,17 +62,18 @@ class Queue extends AbstractModel
             else {
                 if ($time) {
                     $nextRunAt = date("Y-m-d H:i:s", strtotime($time));
-                } else {
+                }
+                else {
                     $nextRunAt = date("Y-m-d H:i:s");
                 }
                 $jobModel = $this->jobFactory->create();
                 $jobModel->addData([
-                    'method' => $method,
-                    'args' => json_encode($args),
-                    'class' => $class,
-                    'hash' => $hash,
-                    'queue' => $queue,
-                    'priority' => $priority,
+                    'method'      => $method,
+                    'args'        => json_encode($args),
+                    'class'       => $class,
+                    'hash'        => $hash,
+                    'queue'       => $queue,
+                    'priority'    => $priority,
                     'next_run_at' => $nextRunAt
                 ]);
                 $jobModel->save();
@@ -93,19 +94,15 @@ class Queue extends AbstractModel
 
     public function getNextJob()
     {
-        $collection = $this->jobCollection->addFieldToFilter(
-            ['next_run_at', 'next_run_at'],
-            [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
-        );
-        $nextJob = $collection->setOrder('priority', Collection::SORT_ORDER_ASC)
+        $nextJob = $this->getRunnableJobs()
+            ->setOrder('priority', Collection::SORT_ORDER_ASC)
             ->addOrder('id', Collection::SORT_ORDER_ASC)
-            ->setPageSize(2)
             ->setCurPage(1)
-            ->getFirstItem()
-        ;
+            ->getFirstItem();
         if (!$nextJob->isEmpty()) {
             return $nextJob;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -130,7 +127,8 @@ class Queue extends AbstractModel
                 $nextJob->save();
                 return false;
             }
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -159,8 +157,16 @@ class Queue extends AbstractModel
      */
     public function getCount()
     {
-        return $this
-            ->getCollection()
+        return $this->getRunnableJobs()
+            ->count();
+    }
+
+    /**
+     * @return JobCollection
+     */
+    private function getRunnableJobs()
+    {
+        return $this->jobCollection
             ->addFieldToFilter(
                 ['next_run_at', 'next_run_at'],
                 [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
@@ -168,7 +174,7 @@ class Queue extends AbstractModel
             ->addFieldToFilter(
                 ['attempts', 'attempts'],
                 [['lt' => 10]]
-            )
-            ->count();
+            );
     }
+
 }
