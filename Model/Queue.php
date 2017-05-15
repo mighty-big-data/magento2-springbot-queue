@@ -168,14 +168,15 @@ class Queue extends AbstractModel
     private function getRunnableJobs()
     {
         $this->jobCollection->clear();
+
         return $this->jobCollection
             ->addFieldToFilter(
-                ['run_at', 'run_at'],
+                ['next_run_at', 'next_run_at'],
                 [['lteq' => date("Y-m-d H:i:s")], ['null' => 'null']]
             )
             ->addFieldToFilter(
                 ['attempts', 'attempts'],
-                [['lt' => 10]]
+                [['lt' => 10], ['null' => 'null']]
             );
     }
 
