@@ -14,7 +14,7 @@ interface JobsInterface
     /**
      * Return a list of jobs
      *
-     * @return array
+     * @return string[]
      */
     public function viewJobs();
 
