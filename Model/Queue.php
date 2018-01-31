@@ -97,6 +97,7 @@ class Queue extends AbstractModel
         $nextJob = $this->getRunnableJobs()
             ->setOrder('priority', Collection::SORT_ORDER_ASC)
             ->addOrder('id', Collection::SORT_ORDER_ASC)
+            ->setPageSize(1)
             ->setCurPage(1)
             ->getFirstItem();
         if (!$nextJob->isEmpty()) {
@@ -168,7 +169,6 @@ class Queue extends AbstractModel
     private function getRunnableJobs()
     {
         $this->jobCollection->clear();
-
         return $this->jobCollection
             ->addFieldToFilter(
                 ['next_run_at', 'next_run_at'],
@@ -177,7 +177,8 @@ class Queue extends AbstractModel
             ->addFieldToFilter(
                 ['attempts', 'attempts'],
                 [['lt' => 10], ['null' => 'null']]
-            );
+            )
+            ->setPageSize(20);
     }
 
 }

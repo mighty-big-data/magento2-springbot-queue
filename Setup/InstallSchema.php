@@ -105,8 +105,26 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Next run time')
             ->setComment('Springbot Queue Table');
-
         $installer->getConnection()->createTable($table);
+
+        $connection->addIndex(
+            $setup->getTable('springbot_queue'),
+            $setup->getIdxName('springbot_queue', ['next_run_at']),
+            ['next_run_at']
+        );
+
+        $connection->addIndex(
+            $setup->getTable('springbot_queue'),
+            $setup->getIdxName('springbot_queue', ['attempts']),
+            ['attempts']
+        );
+
+        $connection->addIndex(
+            $setup->getTable('springbot_queue'),
+            $setup->getIdxName('springbot_queue', ['priority']),
+            ['priority']
+        );
+
         $installer->endSetup();
     }
 }

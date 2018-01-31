@@ -36,7 +36,7 @@ class Jobs extends AbstractModel implements JobsInterface
     public function viewJobs()
     {
         return [
-            'jobs' => $this->queue->getCollection()->toArray()
+            'jobs' => $this->queue->getCollection()->setPageSize(20)->toArray()
         ];
     }
 
