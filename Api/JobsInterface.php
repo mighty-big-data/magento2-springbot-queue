@@ -24,4 +24,18 @@ interface JobsInterface
      * @return \Springbot\Queue\Api\ProcessResponseInterface
      */
     public function process();
+    
+    /**
+     * Process the next job(s) in the queue
+     *
+     * @return \Springbot\Queue\Api\ProcessResponseInterface
+     */
+    public function deleteJob();
+
+    /**
+     * Process the next job(s) in the queue
+     *
+     * @return \Springbot\Queue\Api\ProcessResponseInterface
+     */
+    public function clearJobs();
 }

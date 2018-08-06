@@ -52,4 +52,16 @@ class Jobs extends AbstractModel implements JobsInterface
         }
         return new ProcessResponse($message, $this->queue->getCount());
     }
+    public function deleteJob()
+    {
+        return [
+            'jobs' => $this->queue->getCollection()->setPageSize(20)->toArray()
+        ];
+    }
+    public function clearJobs()
+    {
+        return [
+            'jobs' => $this->queue->getCollection()->setPageSize(20)->toArray()
+        ];
+    }
 }
