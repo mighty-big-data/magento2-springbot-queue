@@ -111,7 +111,19 @@ class Queue extends AbstractModel
     public function clearJobs()
     {
         $this->jobCollection->clear();
-        return false;
+        try {
+            $collection = $this->jobCollection
+                ->addFieldToFilter(
+                    ['id', 'id'],
+                    [['gteq' => 0], ['null' => 'null']]
+                );
+            foreach ($collection as $job) {
+            	$job->delete();
+            }
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage;
+        }
     }
 
     public function deleteJob($id)
