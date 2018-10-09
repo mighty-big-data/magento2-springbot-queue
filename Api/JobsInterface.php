@@ -24,4 +24,20 @@ interface JobsInterface
      * @return \Springbot\Queue\Api\ProcessResponseInterface
      */
     public function process();
+    
+    /**
+     * Process the next job(s) in the queue
+     * 
+     * @param string $jobId Users name.
+     *
+     * @return \Springbot\Queue\Api\ProcessResponseInterface
+     */
+    public function deleteJob($jobId);
+
+    /**
+     * Process the next job(s) in the queue
+     *
+     * @return \Springbot\Queue\Api\ProcessResponseInterface
+     */
+    public function clearJobs();
 }

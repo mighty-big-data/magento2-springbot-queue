@@ -8,11 +8,24 @@
         </resources>
     </route>
 
+    <route url="/V1/springbot/queue/jobs/delete/:jobId" method="POST">
+        <service class="Springbot\Queue\Api\JobsInterface" method="deleteJob"/>
+        <resources>
+            <resource ref="Springbot_Queue::jobs"/>
+        </resources>
+    </route>
+
+    <route url="/V1/springbot/queue/jobs/clear" method="POST">
+        <service class="Springbot\Queue\Api\JobsInterface" method="clearJobs"/>
+        <resources>
+            <resource ref="Springbot_Queue::jobs"/>
+        </resources>
+    </route>
+
     <route url="/V1/springbot/queue/jobs" method="GET">
         <service class="Springbot\Queue\Api\JobsInterface" method="viewJobs"/>
         <resources>
             <resource ref="Springbot_Queue::jobs"/>
         </resources>
     </route>
-
 </routes>

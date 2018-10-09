@@ -52,4 +52,34 @@ class Jobs extends AbstractModel implements JobsInterface
         }
         return new ProcessResponse($message, $this->queue->getCount());
     }
+    public function deleteJob($jobId)
+    {
+        /**$request = $this->getRequest();
+        $id = $request->getParam('springbot-email');*/
+        $result = $this->queue->deleteJob($jobId);
+        if ($result === true) {
+            $message = "Job deleted successfully";
+        } elseif ($result === false) {
+            $message = "Job could not be deleted";
+        } else {
+            $message = var_export($result, true);
+        }
+        return [
+            'message' => $message
+        ];
+    }
+    public function clearJobs()
+    {
+        $result = $this->queue->clearJobs();
+        if ($result === true) {
+            $message = "Job deleted successfully";
+        } elseif ($result === false) {
+            $message = "Job could not be deleted";
+        } else {
+            $message = var_export($result, true);
+        }
+        return [
+            'message' => $message
+        ];
+    }
 }
