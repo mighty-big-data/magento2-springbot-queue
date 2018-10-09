@@ -108,6 +108,24 @@ class Queue extends AbstractModel
         }
     }
 
+    public function deleteJob($id)
+    {
+        $this->jobCollection->clear();
+        try {
+            $out = $this->jobCollection
+                ->addFieldToFilter(
+                    ['id', 'id'],
+                    [['eq' => $id], ['null' => 'null']]
+                )
+                ->setPageSize(1)
+                ->getFirstItem()
+                ->delete();
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage;
+        }
+    }
+
     /**
      * @return bool|null
      */
