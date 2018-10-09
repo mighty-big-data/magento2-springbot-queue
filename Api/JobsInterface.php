@@ -27,10 +27,12 @@ interface JobsInterface
     
     /**
      * Process the next job(s) in the queue
+     * 
+     * @param string $jobId Users name.
      *
      * @return \Springbot\Queue\Api\ProcessResponseInterface
      */
-    public function deleteJob();
+    public function deleteJob($jobId);
 
     /**
      * Process the next job(s) in the queue

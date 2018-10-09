@@ -108,6 +108,12 @@ class Queue extends AbstractModel
         }
     }
 
+    public function clearJobs()
+    {
+        $this->jobCollection->clear();
+        return false;
+    }
+
     public function deleteJob($id)
     {
         $this->jobCollection->clear();
