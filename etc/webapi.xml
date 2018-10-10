@@ -28,8 +28,8 @@
             <resource ref="Springbot_Queue::jobs"/>
         </resources>
     </route>
-	
-	<route url="/V2/springbot/queue/process" method="GET">
+
+    <route url="/V2/springbot/queue/process" method="GET">
         <service class="Springbot\Queue\Api\JobsInterface" method="process"/>
         <resources>
             <resource ref="Springbot_Queue::jobs"/>
