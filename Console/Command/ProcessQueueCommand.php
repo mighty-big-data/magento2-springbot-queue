@@ -24,7 +24,11 @@ class ProcessQueueCommand extends Command
      */
     public function __construct(State $state, Queue $queue)
     {
+        $this->_state = $state;
         $this->_queue = $queue;
+
+        $state->setAreaCode('adminhtml');
+
         parent::__construct();
     }
 
