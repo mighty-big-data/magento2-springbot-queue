@@ -38,7 +38,7 @@ class Job extends AbstractModel
             if (method_exists($object, $method)) {
                 $refl = new ReflectionMethod(get_class($object), $method);
                 if ($refl->getNumberOfRequiredParameters() > count($args)) {
-                    throw new Exception("Too few arguments to call {$class} {method}");
+                    throw new Exception("Too few arguments to call {$class} {$method}");
                 }
                 return call_user_func_array([$object, $method], $args);
             } else {
