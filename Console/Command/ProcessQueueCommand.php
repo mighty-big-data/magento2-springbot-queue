@@ -28,7 +28,7 @@ class ProcessQueueCommand extends Command
         $this->_queue = $queue;
          
         if (!$state->getAreaCode()) {
-            $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_FRONTEND);
+            $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
         }
 
         parent::__construct();
