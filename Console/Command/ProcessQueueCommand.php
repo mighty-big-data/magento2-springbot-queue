@@ -27,8 +27,6 @@ class ProcessQueueCommand extends Command
         $this->_state = $state;
         $this->_queue = $queue;
 
-        $state->setAreaCode('adminhtml');
-
         parent::__construct();
     }
 
@@ -49,7 +47,14 @@ class ProcessQueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        try {
+            $this->_state->getAreaCode();
+        } catch (\Throwable $e) {
+            $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        }
+
         $success = $this->_queue->runNextJob();
+        
         if ($success === true) {
             $output->writeln("Queue Processed.");
         } elseif ($success === false) {
