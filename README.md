@@ -5,7 +5,7 @@
 * This fork aims to provide compatability upgrades with future PHP updates
 * No new features are planned
 * If the original module developer continues to develop the module, please use the original instead
-* To use this fork, please version 1.1.7
+* To use this fork, please version 1.2.3
 
 
 ## Magento2 Job Queue
