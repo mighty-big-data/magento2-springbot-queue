@@ -1,5 +1,13 @@
 [![GPL licensed](https://img.shields.io/badge/license-GPL-blue.svg)](https://raw.githubusercontent.com/springbot/magento2-queue/master/LICENSE.md)
 
+## Mighty Big Data Edit
+
+* This fork aims to provide compatability upgrades with future PHP updates
+* No new features are planned
+* If the original module developer continues to develop the module, please use the original instead
+* To use this fork, please version 1.1.7
+
+
 ## Magento2 Job Queue
 
 This module provides functionality to schedule and run jobs in a queue for Magento2. The basic idea is to allow 
