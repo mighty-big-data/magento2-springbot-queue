@@ -17,6 +17,7 @@ class ProcessQueueCommand extends Command
 {
 
     private $_queue;
+    private $_state;
 
     /**
      * @param State $state
@@ -54,7 +55,7 @@ class ProcessQueueCommand extends Command
         }
 
         $success = $this->_queue->runNextJob();
-        
+
         if ($success === true) {
             $output->writeln("Queue Processed.");
         } elseif ($success === false) {

@@ -1,14 +1,17 @@
 {
-  "name": "springbot/magento2-queue",
-  "description": "A generic job queuing package for Magento 2",
-  "type": "magento2-module",
-  "license": [
-    "OSL-3.0"
-  ],
-  "autoload": {
-    "files": [ "registration.php" ],
-    "psr-4": {
-      "Springbot\\Queue\\": ""
+    "name": "springbot/magento2-queue",
+    "description": "A generic job queuing package for Magento 2",
+    "type": "magento2-module",
+    "version": "1.2.3",
+    "license": [
+        "OSL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Springbot\\Queue\\": ""
+        }
     }
-  }
 }
