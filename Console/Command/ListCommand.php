@@ -23,6 +23,7 @@ class ListCommand extends Command
     const QUEUE_ARGUMENT = '<queue>';
 
     private $_jobCollection;
+    private $_queue;
 
     /**
      * @param State $state
