@@ -8,7 +8,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Springbot\Queue\Model\Queue;
 use Symfony\Component\Console\Input\InputArgument;
-use Zend\Text\Table\Table as TextTable;
+//use Zend\Text\Table\Table as TextTable;
+use \Laminas\Text\Table\Table as TextTable;
 use Springbot\Queue\Model\ResourceModel\Job\Collection as JobCollection;
 
 /**
@@ -57,47 +58,57 @@ class ListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $headers = ['queue', 'class', 'method', 'args', 'priority', 'attempts', 'error'];
-        $this->_jobCollection->setCurPage($input->getArgument(self::PAGE_ARGUMENT));
-        $this->_jobCollection->setPageSize($input->getArgument(self::PER_PAGE_ARGUMENT));
-        $this->_jobCollection->addOrder('priority', JobCollection::SORT_ORDER_ASC);
-        $this->_jobCollection->addOrder('next_run_at', JobCollection::SORT_ORDER_ASC);
+        try {
+            $headers = ['queue', 'class', 'method', 'args', 'priority', 'attempts', 'error'];
+            $this->_jobCollection->setCurPage($input->getArgument(self::PAGE_ARGUMENT));
+            $this->_jobCollection->setPageSize($input->getArgument(self::PER_PAGE_ARGUMENT));
+            $this->_jobCollection->addOrder('priority', JobCollection::SORT_ORDER_ASC);
+            $this->_jobCollection->addOrder('next_run_at', JobCollection::SORT_ORDER_ASC);
 
-        if ($queue = $input->getArgument(self::QUEUE_ARGUMENT)) {
-            $this->_jobCollection->addFieldToFilter('queue', $queue);
-        }
-        $jobs = $this->_jobCollection->toArray();
+            if ($queue = $input->getArgument(self::QUEUE_ARGUMENT)) {
+                $this->_jobCollection->addFieldToFilter('queue', $queue);
+            }
+            $jobs = $this->_jobCollection->toArray();
 
-        // Pre-calculate the max column widths
-        $maxWidths = [];
-        foreach ($headers as $header) {
-            $maxWidths[$header] = strlen($header) + 2;
-        }
-        foreach ($jobs['items'] as $job) {
+            // Pre-calculate the max column widths
+            $maxWidths = [];
             foreach ($headers as $header) {
-                $newLength = strlen($job[$header]) + 2;
-                if ($newLength > $maxWidths[$header]) {
-                    $maxWidths[$header] = $newLength;
+                $maxWidths[$header] = strlen($header) + 2;
+            }
+            foreach ($jobs['items'] as $job) {
+                foreach ($headers as $header) {
+                    if(isset($job[$header]) && $job[$header]) {
+                        $newLength = strlen($job[$header]) + 2;
+                        if ($newLength > $maxWidths[$header]) {
+                            $maxWidths[$header] = $newLength;
+                        }
+                    }
                 }
             }
-        }
-        $maxWidths = array_values($maxWidths);
+            $maxWidths = array_values($maxWidths);
 
-        $table = new TextTable([
-            'columnWidths' => $maxWidths,
-            'decorator' => 'ascii',
-            'AutoSeparate' => TextTable::AUTO_SEPARATE_HEADER,
-            'padding' => 1
-        ]);
+            $table = new TextTable([
+                'columnWidths' => $maxWidths,
+                'decorator' => 'ascii',
+                'AutoSeparate' => TextTable::AUTO_SEPARATE_HEADER,
+                'padding' => 1
+            ]);
 
-        $table->appendRow($headers);
-        foreach ($jobs['items'] as $job) {
-            $rowArr = [];
-            foreach ($headers as $header) {
-                $rowArr[$header] = $job[$header];
+            $table->appendRow($headers);
+            foreach ($jobs['items'] as $job) {
+                $rowArr = [];
+                foreach ($headers as $header) {
+                    $rowArr[$header] = $job[$header];
+                }
+                $table->appendRow($rowArr);
             }
-            $table->appendRow($rowArr);
+            $output->writeln($table->render());
+
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            $output->writeln($e->getTraceAsString());
         }
-        $output->writeln($table->render());
+
+        return 1;
     }
 }

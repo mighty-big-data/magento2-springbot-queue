@@ -54,14 +54,20 @@ class ProcessQueueCommand extends Command
             $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
         }
 
-        $success = $this->_queue->runNextJob();
+        $processorsConfig = 1000;
 
-        if ($success === true) {
-            $output->writeln("Queue Processed.");
-        } elseif ($success === false) {
-            $output->writeln("Job failed.");
-        } else {
-            $output->writeln("No jobs in queue.");
+        for ($i = 0; $i < $processorsConfig; $i++) {
+            $success = $this->_queue->runNextJob();
+
+            if ($success === true) {
+                $output->writeln("Queue Processed.");
+            } elseif ($success === false) {
+                $output->writeln("Job failed.");
+            } else {
+                $output->writeln("No jobs in queue.");
+            }
         }
+
+        return 1;
     }
 }
